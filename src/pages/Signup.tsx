@@ -1,5 +1,8 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { getAuth, createUserWithEmailAndPassword, updateProfile, User } from 'firebase/auth';
+import { setDoc, doc, serverTimestamp, FieldValue } from 'firebase/firestore';
+import { db } from '../firebase.config';
 import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRightIcon.svg';
 import visibilityIcon from '../assets/svg/visibilityIcon.svg';
 
@@ -7,11 +10,14 @@ interface IUserSignUp {
 	email: string;
 	name: string;
 	password: string;
+	timestamp?: FieldValue;
 }
 
 const SignUp = () => {
 	const [showPassword, setShowPassword] = useState<boolean>(false);
-	const [formData, setFormData] = useState<IUserSignUp>({ email: '', password: '', name: '' });
+	const [formData, setFormData] = useState<
+		Partial<Pick<IUserSignUp, 'password'>> & Omit<IUserSignUp, 'password'>
+	>({ email: '', password: '', name: '' });
 	const { email, password, name } = formData;
 
 	const navigate = useNavigate();
@@ -20,13 +26,41 @@ const SignUp = () => {
 		setFormData((prevState) => ({ ...prevState, [event.target.id]: event.target.value }));
 	};
 
+	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		try {
+			const auth = getAuth();
+
+			const userCredential = await createUserWithEmailAndPassword(auth, email, password ?? '');
+
+			const user = userCredential.user;
+
+			if (auth.currentUser) {
+				const user: User = auth.currentUser;
+
+				updateProfile(user, { displayName: name });
+			}
+
+			const formDataCopy = { ...formData };
+			delete formDataCopy.password;
+
+			formDataCopy.timestamp = serverTimestamp();
+
+			await setDoc(doc(db, 'users', user.uid), formDataCopy);
+
+			navigate('/');
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
 	return (
 		<>
 			<div className="pageContainer">
 				<header>
 					<p className="pageHeader">Welcome Back!</p>
 				</header>
-				<form>
+				<form onSubmit={handleSubmit}>
 					<input
 						type="text"
 						className="nameInput"
