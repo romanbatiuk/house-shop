@@ -5,6 +5,7 @@ import { setDoc, doc, serverTimestamp, FieldValue } from 'firebase/firestore';
 import { db } from '../firebase.config';
 import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRightIcon.svg';
 import visibilityIcon from '../assets/svg/visibilityIcon.svg';
+import { toast } from 'react-toastify';
 
 interface IUserSignUp {
 	email: string;
@@ -50,7 +51,7 @@ const SignUp = () => {
 
 			navigate('/');
 		} catch (err) {
-			console.log(err);
+			toast.error('Something went wrong with registration');
 		}
 	};
 
