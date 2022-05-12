@@ -1,10 +1,9 @@
-import { getAuth, updateProfile, User, UserInfo } from 'firebase/auth';
+import { getAuth, updateProfile, UserInfo } from 'firebase/auth';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase.config';
 
 import { ChangeEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { async } from '@firebase/util';
 import { toast } from 'react-toastify';
 
 interface IProfile {

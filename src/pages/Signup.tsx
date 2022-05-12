@@ -6,6 +6,7 @@ import { db } from '../firebase.config';
 import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRightIcon.svg';
 import visibilityIcon from '../assets/svg/visibilityIcon.svg';
 import { toast } from 'react-toastify';
+import OAuth from '../components/OAuth';
 
 interface IUserSignUp {
 	email: string;
@@ -103,9 +104,8 @@ const SignUp = () => {
 						</button>
 					</div>
 				</form>
-				{/* Google OAth */}
-
-				<Link to="/sign-in" className="registerLink">
+				<OAuth />
+				<Link to="/sign-up" className="registerLink">
 					Sign In Instead
 				</Link>
 			</div>
