@@ -1,5 +1,29 @@
+import { Link } from 'react-router-dom';
+import rentCategoryImage from '../assets/jpg/rentCategoryImage.jpg';
+import sellCategoryImage from '../assets/jpg/sellCategoryImage.jpg';
+
 const Explore = () => {
-	return <h1>Explore</h1>;
+	return (
+		<div className="explore">
+			<header>
+				<p className="pageHeader">Explore</p>
+			</header>
+			<main>
+				{/* Slider */}
+				<p className="exploreCategoryHeading">Categories</p>
+				<div className="exploreCategories">
+					<Link to="/category/rent">
+						<img src={rentCategoryImage} className="exploreCategoryImg" alt="rent" />
+						<p className="exploreCategoryName">Places for rent</p>
+					</Link>
+					<Link to="/category/sell">
+						<img src={sellCategoryImage} className="exploreCategoryImg" alt="sell" />
+						<p className="exploreCategoryName">Places for sele</p>
+					</Link>
+				</div>
+			</main>
+		</div>
+	);
 };
 
 export default Explore;
